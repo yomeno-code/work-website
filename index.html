@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тигран — разработчик Telegram-ботов</title>
+<meta name="description" content="Разработка Telegram-ботов, автоматизации и интеграций для бизнеса.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{--bg:#04060d;--ink:#eaf1ff;--mut:#9aa8c4;--c:#5fd6ff;--v:#8b6bff;--ln:rgba(140,180,255,.16);--e:cubic-bezier(.2,.7,.2,1);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px);background:var(--bg)}
+body{font:400 1rem/1.6 Manrope,Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(120% 70% at 50% -10%,#0a1330,var(--bg) 62%)}
+.bg i{position:absolute;width:60vmax;height:60vmax;border-radius:50%;filter:blur(90px);opacity:.26;will-change:transform;animation:dr 28s ease-in-out infinite alternate}
+.bg i:first-child{background:#1d6bff;left:-22vmax;top:-12vmax}
+.bg i:nth-child(2){background:#6a3dff;right:-26vmax;top:40vh;animation-delay:-11s}
+.bg::after{content:"";position:absolute;inset:0;opacity:.07;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes dr{to{transform:translate3d(9vmax,6vmax,0) scale(1.15)}}
+:focus-visible{outline:2px solid var(--c);outline-offset:3px}
+.top{position:fixed;z-index:20;top:0;left:0;right:0;display:flex;align-items:center;gap:14px;padding:calc(env(safe-area-inset-top,0px) + 10px) clamp(14px,4vw,40px) 10px;background:rgba(4,6,13,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--ln)}
+.logo{font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.logo::before{content:"";display:inline-block;width:10px;height:10px;margin-right:9px;border-radius:3px;background:linear-gradient(135deg,var(--c),var(--v));transform:rotate(45deg)}
+.links{display:flex;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{color:var(--mut);text-decoration:none;font-size:.9rem;padding:6px 12px;border-radius:99px;white-space:nowrap;transition:color .3s,background .3s}
+.links a:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+@media(min-width:800px){.links{justify-content:center}}
+@media(max-width:699px){.nv{display:none}}
+.btn{display:inline-flex;align-items:center;padding:14px 26px;border-radius:99px;font:700 .95rem Manrope,system-ui,sans-serif;color:var(--ink);text-decoration:none;border:1px solid var(--ln);background:rgba(255,255,255,.05);cursor:pointer;transition:transform .45s var(--e),box-shadow .4s,background .4s}
+.btn:hover{background:rgba(255,255,255,.1);box-shadow:0 10px 40px -12px rgba(95,214,255,.5)}
+.btn.p{border:0;color:#04101f;background:linear-gradient(120deg,#8fe6ff,#7aa2ff 55%,#a58bff);box-shadow:0 10px 40px -14px rgba(122,162,255,.8)}
+.btn.sm{padding:9px 18px;font-size:.85rem}
+section{position:relative;max-width:1280px;margin:0 auto;padding:clamp(72px,11vw,140px) clamp(18px,5vw,64px)}
+h1,h2,h3{letter-spacing:-.03em;line-height:1.05;font-weight:800}
+h1{font-size:clamp(2.3rem,6vw,5.2rem)}
+h2{font-size:clamp(1.9rem,4.2vw,3.4rem);max-width:18ch}
+.lead{color:var(--mut);max-width:54ch;margin-top:20px;font-size:clamp(1rem,1.4vw,1.15rem)}
+.grad{background:linear-gradient(100deg,#7fe3ff,#8f7bff 50%,#7fe3ff);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;transition:background-position .9s var(--e)}
+.in{opacity:0;animation:rise 1s var(--e) forwards;animation-delay:var(--d,0s)}
+@keyframes rise{from{transform:translateY(26px)}to{opacity:1;transform:none}}
+.js .rv{opacity:0;transform:translateY(30px);transition:opacity 1s var(--e),transform 1s var(--e);transition-delay:var(--d,0s)}
+.js .rv.on{opacity:1;transform:none}
+#top{min-height:100svh;display:grid;align-items:center;gap:16px;padding-top:112px}
+@media(min-width:900px){#top{grid-template-columns:1.05fr .95fr}}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.stage{position:relative;height:min(60vh,500px);min-height:330px}
+@media(min-width:900px){.stage{height:min(78vh,680px)}}
+.stage::before{content:"";position:absolute;inset:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(99,102,255,.38),transparent);filter:blur(30px)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.grid{display:grid;gap:18px;margin-top:48px}
+@media(min-width:700px){.s4,.s2{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.s4{grid-template-columns:repeat(4,1fr)}}
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.015));border-radius:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px var(--ln),0 30px 60px -30px #000}
+.card{position:relative;height:100%;padding:26px;transform-style:preserve-3d;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .6s var(--e),box-shadow .5s,translate .5s var(--e)}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(360px circle at var(--mx,50%) var(--my,0%),rgba(130,200,255,.2),transparent 60%)}
+@media(hover:hover){.card:hover{translate:0 -6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 0 0 1px rgba(127,227,255,.4),0 40px 80px -30px rgba(80,90,255,.55)}.card:hover::before{opacity:1}.card:hover .phone{transform:translateZ(60px) scale(1.05)}}
+.card h3{font-size:1.3rem;margin:18px 0 8px;transform:translateZ(24px)}
+.card p{color:var(--mut);font-size:.95rem}
+.num{font-weight:700;font-size:.8rem;letter-spacing:.12em;color:var(--c)}
+.vis{position:relative;height:130px;margin-top:10px;transform-style:preserve-3d}
+.vis i{position:absolute;left:50%;top:50%;width:80px;height:80px;margin:-40px;border-radius:var(--r);border:1px solid hsl(var(--h) 100% 78%/.55);background:linear-gradient(135deg,hsl(var(--h) 100% 72%/.28),hsl(var(--h) 100% 60%/.04));box-shadow:0 0 30px -6px hsl(var(--h) 100% 65%/.5);translate:calc(var(--k,0)*16px - 16px) calc(var(--k,0)*-12px + 8px);transform:translateZ(calc(var(--k,0)*26px)) rotate(calc(var(--k,0)*7deg));animation:fl 6s ease-in-out infinite;animation-delay:calc(var(--k,0)*-1.4s)}
+.vis i:nth-child(2){--k:1}.vis i:nth-child(3){--k:2}
+@keyframes fl{50%{transform:translateZ(calc(var(--k,0)*26px + 10px)) rotate(calc(var(--k,0)*7deg + 4deg))}}
+.ab{display:grid;gap:24px;align-items:center}
+@media(min-width:900px){.ab{grid-template-columns:1.05fr .95fr}}
+.hi{font-size:clamp(2.4rem,6.2vw,5.2rem);line-height:.98;letter-spacing:-.04em;max-width:none}
+.ab p{max-width:50ch;margin-top:16px;color:var(--mut)}.ab .lead{color:var(--ink)}
+.ab3d{height:min(56vh,460px);min-height:320px}
+.js .ab3d canvas{transform:scale(.88);transition:transform 1.6s var(--e)}.js .ab3d.on canvas{transform:none}
+.vis.sm{height:90px}.vis.sm i{width:56px;height:56px;margin:-28px}
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
+.tags span{padding:8px 16px;border-radius:99px;font-weight:700;font-size:.85rem;color:#cfeaff;border:1px solid rgba(127,227,255,.35);background:rgba(95,214,255,.07);box-shadow:0 0 22px -6px rgba(95,214,255,.55),inset 0 0 12px rgba(95,214,255,.08);transition:transform .4s var(--e),box-shadow .4s}
+.tags.on span{animation:pop .7s var(--e) backwards;animation-delay:calc(var(--n)*.06s + .2s)}
+@media(hover:hover){.tags span:hover{transform:translateY(-3px);box-shadow:0 0 30px -4px rgba(139,107,255,.8),inset 0 0 14px rgba(139,107,255,.18)}}
+.work{display:grid;gap:22px;padding:24px}
+@media(min-width:1000px){.work{grid-template-columns:210px 1fr;align-items:center}}
+.phone{justify-self:center;width:min(220px,100%);aspect-ratio:9/14;padding:14px;border-radius:30px;display:flex;flex-direction:column;gap:8px;background:linear-gradient(170deg,rgb(var(--a)/.22),rgba(6,9,20,.96) 55%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 0 0 1px rgb(var(--a)/.4),0 30px 60px -24px rgb(var(--a)/.6);transform:translateZ(34px);transition:transform .7s var(--e)}
+.ph-h{display:flex;align-items:center;gap:8px;margin-bottom:auto;font-weight:700;font-size:.8rem}
+.ph-h::before{content:"";width:9px;height:9px;border-radius:50%;background:rgb(var(--a));box-shadow:0 0 12px rgb(var(--a))}
+.bb{max-width:84%;padding:9px 12px;border-radius:14px 14px 14px 4px;font-size:.78rem;line-height:1.35;background:rgba(255,255,255,.09)}
+.bb.u{align-self:flex-end;border-radius:14px 14px 4px 14px;background:rgb(var(--a)/.88);color:#04101f;font-weight:600}
+.on .bb{animation:pop .6s var(--e) backwards;animation-delay:calc(var(--n)*.28s + .35s)}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.95)}}
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:700;color:rgb(var(--a));border:1px solid rgb(var(--a)/.4);background:rgb(var(--a)/.1)}
+.work h3{margin:12px 0 2px}.work .cat{margin-bottom:14px}
+.more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--e)}
+.more>div{overflow:hidden;min-height:0;visibility:hidden;transition:visibility .5s}
+.more.open{grid-template-rows:1fr}.more.open>div{visibility:visible}
+.more p{margin-top:10px}.more b{color:var(--ink)}
+.stk{font-weight:700;font-size:.8rem;color:rgb(var(--a))!important}
+.tl{position:relative;margin-top:48px;padding-left:44px}
+.tl::before,.tl>i{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:2px}
+.tl::before{background:var(--ln)}
+.tl>i{background:linear-gradient(var(--c),var(--v));transform-origin:top;transform:scaleY(var(--p,0))}
+.st{position:relative;max-width:620px;padding-bottom:46px}
+.st::before{content:"";position:absolute;left:-44px;top:2px;width:24px;height:24px;border-radius:50%;background:var(--bg);border:2px solid var(--ln);transition:border-color .5s,box-shadow .5s}
+.st.hit::before{border-color:var(--c);box-shadow:0 0 0 6px rgba(95,214,255,.12),0 0 24px var(--c)}
+.st h3{font-size:1.5rem;margin:6px 0}.st p{color:var(--mut)}
+.adv{display:grid;gap:18px;margin-top:48px}
+@media(min-width:900px){.adv{grid-template-columns:repeat(12,1fr)}.adv>:nth-child(1){grid-column:1/8}.adv>:nth-child(2){grid-column:8/13;margin-top:64px}.adv>:nth-child(3){grid-column:1/6}.adv>:nth-child(4){grid-column:6/13;margin-top:40px}}
+.av{position:relative;overflow:hidden;min-height:210px;padding:34px;border-radius:28px}
+.av>*{position:relative;z-index:1}
+.av::before{content:"";position:absolute;width:120px;height:120px;right:34px;top:26px;border-radius:50%;border:1px solid rgb(var(--a)/.5);background:linear-gradient(135deg,rgb(var(--a)/.25),transparent);box-shadow:inset 0 0 30px rgb(var(--a)/.25)}
+.av::after{content:"";position:absolute;width:240px;height:240px;right:-70px;top:-90px;border-radius:50%;background:radial-gradient(closest-side,rgb(var(--a)/.4),transparent)}
+.av h3{font-size:clamp(1.4rem,2.4vw,2rem);line-height:1.15;max-width:15ch;margin:54px 0 10px}.av p{color:var(--mut);max-width:38ch}
+.faq{display:grid;gap:10px;max-width:820px;margin-top:40px}
+.fi{border-radius:18px}
+.q{display:flex;width:100%;justify-content:space-between;align-items:center;gap:16px;padding:20px 24px;border:0;background:none;color:var(--ink);font:700 1.05rem/1.3 Manrope,system-ui,sans-serif;text-align:left;cursor:pointer;border-radius:inherit}
+.pl{flex:none;font-size:1.5rem;color:var(--c);transition:transform .4s var(--e)}
+.q[aria-expanded=true] .pl{transform:rotate(45deg)}
+.fi p{padding:0 24px 22px;color:var(--mut)}
+#contact{display:grid;place-items:center;min-height:92svh;text-align:center;isolation:isolate;overflow:hidden}
+.ct h2{margin:0 auto;max-width:20ch;text-shadow:0 2px 30px rgba(4,6,13,.85)}.ct .cta{justify-content:center;margin-top:36px}
+.orb{position:absolute;left:50%;top:50%;width:min(88vw,660px);aspect-ratio:1;translate:-50% -50%;z-index:-1;pointer-events:none}
+.orb::before{content:"";position:absolute;inset:12%;border-radius:46% 54% 50% 50%/55% 45% 55% 45%;background:conic-gradient(#2f6bff,#8b6bff,#bfe9ff,#6a8bff,#2f6bff);opacity:.5;box-shadow:inset 0 0 80px rgba(255,255,255,.25);animation:sp 30s linear infinite}
+.orb i{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(127,227,255,.4);animation:wv 7s var(--e) infinite;animation-delay:calc(var(--k)*-2.3s)}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes wv{from{transform:scale(.45);opacity:.9}to{transform:scale(1.12);opacity:0}}
+footer{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between;max-width:1280px;margin:0 auto;padding:36px clamp(18px,5vw,64px);border-top:1px solid var(--ln);color:var(--mut);font-size:.9rem}
+footer p{display:flex;flex-wrap:wrap;gap:6px 18px}footer a{color:var(--ink);text-decoration:none}footer a:hover{color:var(--c)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.in,.js .rv{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i></div>
+<header class="top"><b class="logo">Тигран</b>
+<nav class="links" aria-label="Разделы"><a href="#services">Услуги</a><a href="#about">Обо мне</a><a href="#works">Проекты</a><a href="#process">Процесс</a><a href="#faq">FAQ</a></nav>
+<a class="btn p sm nv" href="#contact" data-tg>Написать</a></header>
+<main>
+<section id="top">
+<div><h1 class="in" style="--d:.1s"><span class="grad">Telegram-боты,</span><br>которые работают<br>на <span class="grad">твой бизнес</span></h1>
+<p class="lead in" style="--d:.3s">Разрабатываю Telegram-ботов и автоматизацию, которые упрощают процессы, экономят время и помогают масштабировать проекты.</p>
+<div class="cta in" style="--d:.5s"><a class="btn p" href="#contact" data-tgm data-mag>Обсудить проект</a><a class="btn" href="#works" data-mag>Смотреть работы</a></div></div>
+<div class="stage in" style="--d:.35s" aria-hidden="true"><canvas id="gl"></canvas></div>
+</section>
+<section id="services"><h2 class="rv">Чем я могу помочь</h2><div class="grid s4" id="svc"></div></section>
+<section id="about"><div class="ab"><div><h2 class="hi rv">HELLO,<br><span class="grad">I’M TIGRAN</span></h2><p class="lead rv" style="--d:.1s">Привет, я Тигран! Занимаюсь разработкой Telegram-ботов и автоматизацией различных процессов.</p><p class="rv" style="--d:.2s">Мне нравится создавать вещи, которые упрощают жизнь и решают реальные задачи. Работаю над ботами под разные цели: от простых инструментов для общения до более сложных систем с интеграциями и базами данных.</p><p class="rv" style="--d:.3s">Стараюсь делать всё так, чтобы бот был не только функциональным, но и удобным в использовании.</p><p class="rv" style="--d:.4s">Открыт к новым идеям и интересным проектам. Если у тебя есть задумка — давай обсудим, как её реализовать.</p></div><div class="stage ab3d rv" aria-hidden="true"><canvas id="gl2"></canvas></div></div><div class="grid s4" id="abc"></div><div class="tags rv" id="tech" role="group" aria-label="Технологии"></div></section>
+<section id="works"><h2 class="rv">Проекты</h2><p class="lead rv">Реальные кейсы появятся здесь позже. Сейчас — демонстрационные концепты, которые показывают подход и интерфейсы.</p><div class="grid s2" id="wk"></div></section>
+<section id="process"><h2 class="rv">Как мы работаем</h2><div class="tl" id="tl"></div></section>
+<section id="why"><h2 class="rv">Как я подхожу к работе</h2><div class="adv" id="adv"></div></section>
+<section id="faq"><h2 class="rv">Частые вопросы</h2><div class="faq" id="fq"></div></section>
+<section id="contact"><div class="orb" aria-hidden="true"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div>
+<div class="ct"><h2 class="rv">Есть идея?<br>Давай превратим её в <span class="grad">работающий продукт</span></h2>
+<div class="cta rv" style="--d:.15s"><a class="btn p" href="#contact" data-tg data-mag>Написать в Telegram</a><a class="btn" href="#contact" data-tgm data-mag>Обсудить проект</a></div></div></section>
+</main>
+<footer><p><b style="color:var(--ink)">Тигран</b> Разработчик Telegram-ботов и автоматизации</p><p><a href="#contact" data-tg>Telegram @vokihana</a><a href="#services">Услуги</a><a href="#faq">FAQ</a></p><p>© <span id="yr">2026</span> Тигран</p></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const TG='vokihana';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const rm=matchMedia('(prefers-reduced-motion:reduce)').matches,fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+const S=[['01','Telegram-боты','Разработка ботов под конкретные задачи бизнеса, сообществ и цифровых продуктов.','18px 18px 18px 4px'],['02','Автоматизация','Автоматизация рутинных процессов, обработка заявок и интеграция с внешними сервисами.','50%'],['03','Интеграции и API','Соединение Telegram-ботов с API, базами данных и сторонними сервисами.','10px'],['04','Поддержка и развитие','Доработка существующих ботов, исправление ошибок и добавление новых возможностей.','2px']];
+
+const W=[['LeadFlow','Бот для обработки заявок','95 214 255','Принимать заявки из Telegram без потерь и ручной переписки.','Бот по шагам собирает данные, проверяет формат и передаёт заявку менеджеру.','Python · aiogram · PostgreSQL',[['b','Здравствуйте! Оставим заявку?'],['u','Да, оставить'],['b','Как вас зовут?']]],['Circle','Бот для сообщества','139 107 255','Навести порядок в общении участников закрытого сообщества.','Бот встречает новичков, анонсирует события и собирает вопросы.','Node.js · grammY · Redis',[['b','Добро пожаловать в Circle!'],['u','Что нового?'],['b','Ближайшая встреча в четверг']]],['OpsPilot','Бот для автоматизации бизнеса','78 224 192','Убрать рутину из ежедневных процессов небольшой команды.','Бот создаёт задачи, напоминает о сроках и формирует сводки.','Python · Celery · Redis',[['u','/сводка'],['b','Собираю данные за день…'],['b','Сводка готова']]],['Syncly','Бот с интеграцией сервисов','181 140 255','Связать бота с CRM, таблицами и внешним API.','Бот запрашивает данные во внешних сервисах и показывает результат в чате.','TypeScript · REST API · PostgreSQL',[['u','Статус заказа?'],['b','Проверяю в системе…'],['b','Заказ передан в работу']]]];
+const P=[['Знакомство','Обсуждаем задачу и цели проекта.'],['Проектирование','Определяем функциональность и архитектуру.'],['Разработка','Создаём бота, интеграции и необходимые сценарии.'],['Тестирование','Проверяем корректность работы и исправляем ошибки.'],['Запуск','Разворачиваем проект и передаём результат.']];
+const V=[['Индивидуальный подход','Решение собирается под вашу задачу, а не из шаблона.','95 214 255'],['Понятная архитектура','Логика бота выстроена так, чтобы её было просто понять и поддерживать.','139 107 255'],['Автоматизация без лишней сложности','Автоматизируем то, что действительно экономит время, не усложняя процессы.','78 224 192'],['Возможность дальнейшего развития','Бота можно расширять: добавлять сценарии, интеграции и новые функции.','181 140 255']];
+const F=[['Какие задачи может решать Telegram-бот?','Приём и обработка заявок, ответы на частые вопросы, уведомления, управление сообществом, интеграции с CRM и таблицами, внутренние рабочие инструменты. Подходящий сценарий определяем вместе в начале проекта.'],['Можно ли интегрировать бота с внешним API?','Да. Бот может обмениваться данными с внешними сервисами, базами данных и вашими системами — если у них есть доступный API.'],['Сколько времени занимает разработка?','Это зависит от функциональности и числа интеграций: простые сценарии делаются быстрее, сложные — дольше. Сроки называю после обсуждения задачи.'],['От чего зависит стоимость?','От объёма функций, сложности логики, количества интеграций и потребности в поддержке. Итоговую стоимость называю после обсуждения проекта.'],['Можно ли доработать существующего бота?','Да. Могу разобраться в текущем коде, исправить ошибки и добавить новые возможности. Сначала оценим состояние проекта.'],['Предоставляется ли поддержка после запуска?','Да, можно договориться о сопровождении: исправление ошибок, доработки и развитие функций. Формат обсуждаем отдельно.']];
+$('#svc').innerHTML=S.map((s,i)=>`<div class="rv" style="--d:${i*.08}s"><article class="card glass" data-tilt style="--h:${[195,255,215,275][i]}"><span class="num">${s[0]}</span><div class="vis" style="--r:${s[3]}"><i></i><i></i><i></i></div><h3>${s[1]}</h3><p>${s[2]}</p></article></div>`).join('');
+
+$('#wk').innerHTML=W.map((w,i)=>`<div class="rv" style="--d:${i%2*.1}s"><article class="card glass work" data-tilt style="--a:${w[2]}"><div class="phone"><div class="ph-h">${w[0]}</div>${w[6].map((m,j)=>`<div class="bb ${m[0]}" style="--n:${j}">${m[1]}</div>`).join('')}</div><div><span class="tag">Концепт</span><h3>${w[0]}</h3><p class="cat">${w[1]}</p><button class="btn sm" aria-expanded="false" aria-controls="m${i}" data-t>Подробнее</button><div class="more" id="m${i}"><div><p><b>Задача.</b> ${w[3]}</p><p><b>Решение.</b> ${w[4]}</p><p class="stk">${w[5]}</p></div></div></div></article></div>`).join('');
+$('#tl').innerHTML='<i></i>'+P.map((p,i)=>`<div class="st rv"><span class="num">Этап ${i+1}</span><h3>${p[0]}</h3><p>${p[1]}</p></div>`).join('');
+$('#adv').innerHTML=V.map((v,i)=>`<div class="av glass rv" style="--a:${v[2]};--d:${i*.08}s"><h3>${v[0]}</h3><p>${v[1]}</p></div>`).join('');
+$('#fq').innerHTML=F.map((f,i)=>`<div class="fi glass rv"><button class="q" aria-expanded="false" aria-controls="f${i}">${f[0]}<span class="pl" aria-hidden="true">+</span></button><div class="more" id="f${i}" role="region"><div><p>${f[1]}</p></div></div></div>`).join('');
+document.addEventListener('click',e=>{const b=e.target.closest('[aria-controls][aria-expanded]');if(!b)return;const o=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',o);$('#'+b.getAttribute('aria-controls')).classList.toggle('open',o);if(b.dataset.t)b.textContent=o?'Свернуть':'Подробнее'});
+const B=[['Разработка','Создаю Telegram-ботов под вашу задачу: от простых инструментов для общения до сложных сценариев.',200,'18px 18px 18px 4px'],['Автоматизация','Автоматизирую рутинные процессы: заявки, уведомления, напоминания и отчёты.',260,'50%'],['Интеграции','Подключаю ботов к внешним API, базам данных и сторонним сервисам.',220,'10px'],['Архитектура','Продумываю структуру проекта, чтобы бота было удобно поддерживать и развивать.',285,'2px']];
+$('#abc').innerHTML=B.map((b,i)=>`<div class="rv" style="--d:${i*.08}s"><article class="card glass" data-tilt style="--h:${b[2]}"><div class="vis sm" style="--r:${b[3]}"><i></i><i></i><i></i></div><h3>${b[0]}</h3><p>${b[1]}</p></article></div>`).join('');
+$('#tech').innerHTML=['Python','aiogram','Node.js','grammY','TypeScript','PostgreSQL','Redis','REST API','Webhooks'].map((t,i)=>`<span style="--n:${i}">${t}</span>`).join('');
+const tg='https://t.me/'+TG;
+$$('[data-tg]').forEach(a=>{a.href=tg;a.target='_blank';a.rel='noopener'});
+$$('[data-tgm]').forEach(a=>{a.href=tg+'?text='+encodeURIComponent('Здравствуйте! Хочу обсудить проект.');a.target='_blank';a.rel='noopener'});
+$('#yr').textContent=new Date().getFullYear();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.15,rootMargin:'0px 0px -6% 0px'});
+$$('.rv').forEach(el=>io.observe(el));
+const tl=$('#tl'),sts=$$('.st',tl);
+const upd=()=>{const y=innerHeight*.6;tl.style.setProperty('--p',Math.max(0,Math.min(1,(y-tl.getBoundingClientRect().top)/tl.offsetHeight)));sts.forEach(s=>s.classList.toggle('hit',s.getBoundingClientRect().top<y))};
+let tk=0;addEventListener('scroll',()=>{if(!tk){tk=1;requestAnimationFrame(()=>{tk=0;upd()})}},{passive:true});upd();
+if(fine&&!rm){
+$$('[data-mag]').forEach(b=>{b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.22}px,${(e.clientY-r.top-r.height/2)*.3}px)`});b.addEventListener('pointerleave',()=>{b.style.transform=''})});
+$$('[data-tilt]').forEach(el=>{el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height,s=el.style;s.setProperty('--rx',(.5-y)*9+'deg');s.setProperty('--ry',(x-.5)*11+'deg');s.setProperty('--mx',x*100+'%');s.setProperty('--my',y*100+'%')});el.addEventListener('pointerleave',()=>{el.style.setProperty('--rx','0deg');el.style.setProperty('--ry','0deg')})});
+const gs=$$('.grad');addEventListener('pointermove',e=>{const p=e.clientX/innerWidth*100+'% 0';gs.forEach(g=>{g.style.backgroundPosition=p})},{passive:true});
+}
+(()=>{const T=window.THREE,cv=$('#gl');if(!T)return;let R;try{R=new T.WebGLRenderer({canvas:cv,alpha:true,antialias:true})}catch(e){return}
+R.setPixelRatio(Math.min(devicePixelRatio,1.75));
+const sc=new T.Scene(),cam=new T.PerspectiveCamera(38,1,.1,50);cam.position.z=10;
+const ms=[],M=(a,b,k)=>{const m=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,blending:T.AdditiveBlending,uniforms:{t:{value:0},k:{value:k},a:{value:new T.Color(a)},b:{value:new T.Color(b)}},
+vertexShader:'varying vec3 n,v;void main(){vec4 m=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);v=normalize(-m.xyz);gl_Position=projectionMatrix*m;}',
+fragmentShader:'uniform float t,k;uniform vec3 a,b;varying vec3 n,v;void main(){float f=pow(1.-abs(dot(n,v)),2.4);vec3 c=mix(a,b,.5+.5*sin(n.y*2.2+n.x*1.6+t));gl_FragColor=vec4(c*(f*1.5+.06)*k,(f*.9+.05)*k);}'});ms.push(m);return m};
+const g=new T.Group();sc.add(g);
+const core=new T.Mesh(new T.TorusKnotGeometry(1.15,.38,220,32,2,3),M(0x5fd6ff,0x8b6bff,.95)),shell=new T.Mesh(new T.IcosahedronGeometry(2.1,1),M(0x8b6bff,0x5fd6ff,.4));
+g.add(core,shell);
+const pn=[];for(let i=0;i<6;i++){const w=i%2?1.1:1.5,gm=new T.BoxGeometry(w,.46,.06),p=new T.Group(),c1=i%2?0x8b6bff:0x5fd6ff;
+p.add(new T.Mesh(gm,new T.MeshBasicMaterial({color:c1,transparent:true,opacity:.14,depthWrite:false})));
+p.add(new T.LineSegments(new T.EdgesGeometry(gm),new T.LineBasicMaterial({color:i%2?0xb9a8ff:0x9fe6ff,transparent:true,opacity:.8})));
+const ln=new T.Mesh(new T.PlaneGeometry(w*.55,.05),new T.MeshBasicMaterial({color:0xcfeaff,transparent:true,opacity:.5}));ln.position.set(-.1,0,.04);p.add(ln);
+p.userData={a:i/6*6.283,r:2.9+(i%3)*.25,y:(i%3-1)*1.15};g.add(p);pn.push(p)}
+const nd=[],lp=[];for(let i=0;i<7;i++){const a=i*2.4,r=3.4+(i%2)*.5,m=new T.Mesh(new T.IcosahedronGeometry(.07,1),new T.MeshBasicMaterial({color:0xbfe9ff}));m.position.set(Math.cos(a)*r,Math.sin(i*1.7)*1.8,Math.sin(a)*r*.6);g.add(m);nd.push(m)}
+nd.forEach((m,i)=>lp.push(m.position,nd[(i+1)%7].position));
+g.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(lp),new T.LineBasicMaterial({color:0x7fb4ff,transparent:true,opacity:.25})));
+const N=matchMedia('(max-width:700px)').matches?140:260,pa=new Float32Array(N*3);
+for(let i=0;i<N;i++){const r=3.5+Math.random()*5,th=Math.random()*6.283,ph=Math.acos(2*Math.random()-1);pa.set([r*Math.sin(ph)*Math.cos(th),r*Math.cos(ph)*.7,r*Math.sin(ph)*Math.sin(th)],i*3)}
+const pg=new T.BufferGeometry();pg.setAttribute('position',new T.BufferAttribute(pa,3));
+sc.add(new T.Points(pg,new T.PointsMaterial({size:.06,color:0xa9d8ff,transparent:true,opacity:.6,depthWrite:false})));
+let px=0,py=0,tx=0,ty=0,vis=true;
+addEventListener('pointermove',e=>{tx=e.clientX/innerWidth-.5;ty=e.clientY/innerHeight-.5},{passive:true});
+const draw=t=>{px+=(tx-px)*.06;py+=(ty-py)*.06;g.rotation.y=t*.14+px*.8;g.rotation.x=py*.45;core.rotation.x=t*.12;core.rotation.z=t*.07;
+pn.forEach(p=>{const d=p.userData,a=d.a+t*.16;p.position.set(Math.cos(a)*d.r,d.y+Math.sin(t*.7+d.a)*.14,Math.sin(a)*d.r*.5);p.lookAt(cam.position)});
+ms.forEach(m=>{m.uniforms.t.value=t});R.render(sc,cam)};
+const rs=()=>{const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();if(rm)draw(1)};
+new ResizeObserver(rs).observe(cv);rs();
+if(!rm){new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(cv);const clk=new T.Clock(),loop=()=>{requestAnimationFrame(loop);if(vis)draw(clk.getElapsedTime())};loop()}
+})();
+(()=>{const T=window.THREE,cv=$('#gl2');if(!T||!cv)return;let R;try{R=new T.WebGLRenderer({canvas:cv,alpha:true,antialias:true})}catch(e){return}
+R.setPixelRatio(Math.min(devicePixelRatio,1.75));
+const sc=new T.Scene(),cam=new T.PerspectiveCamera(36,1,.1,50);cam.position.z=10.5;
+const ms=[],M=(a,b,k)=>{const m=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,blending:T.AdditiveBlending,uniforms:{t:{value:0},k:{value:k},a:{value:new T.Color(a)},b:{value:new T.Color(b)}},
+vertexShader:'varying vec3 n,v;void main(){vec4 m=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);v=normalize(-m.xyz);gl_Position=projectionMatrix*m;}',
+fragmentShader:'uniform float t,k;uniform vec3 a,b;varying vec3 n,v;void main(){float f=pow(1.-abs(dot(n,v)),2.4);vec3 c=mix(a,b,.5+.5*sin(n.y*2.2+n.x*1.6+t));gl_FragColor=vec4(c*(f*1.5+.06)*k,(f*.9+.05)*k);}'});ms.push(m);return m};
+const g=new T.Group();sc.add(g);
+const sph=new T.Mesh(new T.SphereGeometry(1.7,64,48),M(0x5fd6ff,0x8b6bff,1.1)),core=new T.Mesh(new T.IcosahedronGeometry(.85,1),M(0x8b6bff,0x5fd6ff,1)),ring=new T.Mesh(new T.TorusGeometry(2.35,.012,8,160),new T.MeshBasicMaterial({color:0x7fb4ff,transparent:true,opacity:.45}));
+ring.rotation.x=1.25;g.add(sph,core,ring);
+const pn=[];[[1.3,.5,2,0x5fd6ff,0x9fe6ff],[1,.7,3,0x8b6bff,0xb9a8ff],[.9,.32,1,0x5fd6ff,0x9fe6ff],[1.2,.5,2,0x8b6bff,0xb9a8ff],[.8,.8,3,0x5fd6ff,0x9fe6ff]].forEach(([w,h,n,c1,c2],i)=>{const gm=new T.BoxGeometry(w,h,.05),p=new T.Group();
+p.add(new T.Mesh(gm,new T.MeshBasicMaterial({color:c1,transparent:true,opacity:.16,depthWrite:false})),new T.LineSegments(new T.EdgesGeometry(gm),new T.LineBasicMaterial({color:c2,transparent:true,opacity:.85})));
+for(let j=0;j<n;j++){const lw=w*(.72-j*.2),l=new T.Mesh(new T.PlaneGeometry(lw,.04),new T.MeshBasicMaterial({color:0xcfeaff,transparent:true,opacity:.5}));l.position.set(-w/2+.12+lw/2,h/2-.15-j*.1,.04);p.add(l)}
+p.userData={a:i/5*6.283,r:2.55+(i%2)*.3,y:[.9,-.7,1.5,-1.4,.1][i]};g.add(p);pn.push(p)});
+const N=120,pa=new Float32Array(N*3);for(let i=0;i<N;i++){const r=3+Math.random()*3,th=Math.random()*6.283,ph=Math.acos(2*Math.random()-1);pa.set([r*Math.sin(ph)*Math.cos(th),r*Math.cos(ph)*.8,r*Math.sin(ph)*Math.sin(th)],i*3)}
+const pg=new T.BufferGeometry();pg.setAttribute('position',new T.BufferAttribute(pa,3));g.add(new T.Points(pg,new T.PointsMaterial({size:.06,color:0xa9d8ff,transparent:true,opacity:.6,depthWrite:false})));
+let px=0,py=0,tx=0,ty=0,kick=0,spin=0,vis=true;
+addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();tx=Math.max(-1,Math.min(1,((e.clientX-r.left)/r.width-.5)*2));ty=Math.max(-1,Math.min(1,((e.clientY-r.top)/r.height-.5)*2))},{passive:true});
+cv.addEventListener('pointerdown',()=>{kick=1});
+const draw=t=>{px+=(tx-px)*.06;py+=(ty-py)*.06;kick*=.93;spin+=kick*.08;g.rotation.y=t*.15+px*.7+spin;g.rotation.x=py*.4;core.rotation.x=t*.4;core.rotation.y=t*.3;sph.scale.setScalar(1+kick*.08);
+pn.forEach(p=>{const d=p.userData,a=d.a+t*.2;p.position.set(Math.cos(a)*d.r,d.y+Math.sin(t*.8+d.a)*.12,Math.sin(a)*d.r*.55);p.lookAt(cam.position)});
+ms.forEach(m=>{m.uniforms.t.value=t});R.render(sc,cam)};
+const rs=()=>{const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();if(rm)draw(1)};
+new ResizeObserver(rs).observe(cv);rs();
+if(!rm){new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(cv);const clk=new T.Clock(),loop=()=>{requestAnimationFrame(loop);if(vis)draw(clk.getElapsedTime())};loop()}
+})();
+</script>
+</body>
+</html>
